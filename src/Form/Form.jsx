@@ -1,18 +1,14 @@
 import css from './Form.module.css';
 import { useState } from 'react';
-import { nanoid } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
 import { getVisibleContacts } from '../redux/selectors';
 import { addContact } from '../redux/contactSlice';
-
-const nameInputId = nanoid();
-const numberInputId = nanoid();
 
 const Form = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
-  const contacts = useSelector(getVisibleContacts);
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   const handleSubmit = event => {
@@ -27,7 +23,7 @@ const Form = () => {
       return;
     }
 
-    dispatch(addContact({ name, number }));
+    dispatch(addContacts({ name, number }));
     setName('');
     setNumber('');
   };
@@ -48,12 +44,13 @@ const Form = () => {
   };
 
     return (
-      <div className={css.contactform}>
+      <div className={css.contactForm}>
         <form type="submit" onSubmit={handleSubmit}>
-          <label htmlFor={nameInputId}>
+          <label className={css.contactFormLabel} htmlFor={contacts.name}>
             Name
             <input
-              id='nameInputId'
+              id={contacts.name}
+              className={css.contactFormLabel__inputName}
               type="text"
               name="name"
               placeholder='Contact name'
@@ -64,10 +61,11 @@ const Form = () => {
               required
             />
           </label>
-          <label htmlFor={numberInputId}>
+          <label htmlFor={contacts.phone}>
             Number
             <input
-              id='numberInputId'
+              id={contacts.phone}
+              className={css.contactFormLabel__inputPhone}
               type="tel"
               name="number"
               placeholder='XXX-XX-XX'
